@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Applicants</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .error {
+            color: red;
+        }
+		h1{
+			text-align: center;
+			color: seagreen;
+		}
+        h2{
+            color: green;
+        }
+        form{
+            background-color:lightblue;
+            text-align: center;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            border: 1px solid black;
+            width: 400px;
+            height: 50%;
+            margin: auto;
+            margin-top: 15%;
+        }
+        .c{
+            height: 30px;
+            width: 300px;
+        }
+		.d{
+			height: 30px;
+			width: 300px;
+		}
+        button{
+            color: red;
+            background-color:bisque;
+            height: 30px;
+            width: 70px;
+        }
+		.heading{
+			text-decoration: underline;
+		}
+		#resumePage{
+			border: 1px solid black;
+			margin-left: 150px;
+			margin-right: 150px;
+			margin-top: 50px;
+			margin-bottom: 30px;
+			padding: 30px;
+		}
+    </style>
+</head>
+<body>
+
+    <div id="loginPage"> 
+        <form id="loginForm">
+          <h2>Login Page</h2>
+          <div>  
+            <input class="c" type="text" id="username" name="user" placeholder="User Name:" required>
+        </div>
+        <br>
+        <div>  
+            <input class="c" type="password" id="'password" name="password" placeholder="Password:" required>
+        </div>
+        <br>
+        <div>
+            <button type="button" onclick="login()">Login</button> &nbsp;&nbsp;
+            <button type="reset">Clear</button>
+        </div>  
+            <p id="loginError" class="error"></p>
+        </form>
+    </div>
+    <div id="resumePage">
+        <h1>Resume Page</h1>
+        <label for="jobSearch"><b>Search by Job:</b></label>
+        <input class="d" type="text" id="jobSearch" placeholder="Enter job title">
+        <button onclick="searchApplications()">Search</button>
+      
+        <div id="applicantDetails">
+          
+        </div>
+      
+        <button onclick="showPrevious()">Previous</button>
+        <button onclick="showNext()">Next</button>
+ 
+    <script>
+        const users = [
+            { username: "user1", password: "pass1" },
+            { username: "user2", password: "pass2" }
+        ];
+     
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const isValidUser = users.some(user => user.username === username && user.password === password);
+
+            if (isValidUser) {
+                currentUser = username;
+                document.getElementById("loginPage").style.display = "none";
+                document.getElementById("resumePage").style.display = "block";
+                displayApplicantDetails();
+            } else {
+                document.getElementById("loginError").innerText = "Invalid username/password.";
+            }
+        }
+
+        window.addEventListener("popstate", function (e) {
+            if (currentUser) {
+                history.pushState(null, null, document.URL);
+            }
+        });
+      
+        window.addEventListener("beforeunload", function (e) {
+            if (currentUser) {
+                localStorage.setItem("currentUser", currentUser);
+            }
+        });
+        
+        window.addEventListener("load", function (e) {
+            const storedUser = localStorage.getItem("currentUser");
+            if (storedUser && users.some(user => user.username === storedUser)) {
+                currentUser = storedUser;
+                document.getElementById("loginPage").style.display = "none";
+                document.getElementById("resumePage").style.display = "block";
+                displayApplicantDetails();
+            }
+        });
+
+        const applicantsData = [
+      {
+			"id":1,
+			"basics": 
+			{
+				"name": "John Doe",
+				"AppliedFor": "Software Engineer",
+				"image": "",
+				"email": "john@gmail.com",
+				"phone": "9999999999",
+				"location": 
+				{
+					"address": "2712 Broadway St",
+					"postalCode": "560063",
+					"city": "Bangalore",
+					"state": "Karnataka"
+				},
+				"profiles":
+				{
+					"network": "LinkedIn",
+					"url": "https://linkedin.com/john"
+				}
+			},
+			
+			"skills": 
+			{
+				"name": "Web Development",
+				"level": "Master",
+				"keywords": 
+				[
+					"HTML",
+					"CSS",
+					"JavaScript",
+					"Python"
+				]
+			},
+			
+			"work": 
+			{
+				"Companyname": "Harman",
+				"Position": "Associate Engineer",
+				"Startdate": "2014-01-01",
+				"Enddate": "2015-12-10",
+				"Summary": "Associate engineer with development, testing verification and validation experience on Car UI display systems.Performed phone projection development of user stories and testing with infotainment system such as Android auto ,Car playAnalyzed requirements , created test plans, executed test cases for connectivity epic such as C-connect, F-connect.Good at analyzing DLT logs and analyzing the code refactor areas."
+			},
+				
+			"Internship":
+			{
+				"Companyname": "Ibm",
+				"Position": "intern",
+				"Startdate": "2013-01-01",
+				"Enddate": "2014-01-01",
+				"Summary": " Learned about Tools used for website testing such as Deep Trawl, NVDA, web developer extension, OpenVAS,Learned about the importance and concept of OWASP.Learned React JS and worked for Frontend development with professional."
+		
+			},
+				
+			"projects":
+			{
+				"name": "Diabetic Retinopaty",
+				"description": " created a GUI using QT designer which will take image of retina as input, input image will be processed and compare with the images present in database and then classified as one of DR stage or normal.OpenCV and image processing concepts are used. survey paper on this project is publish in 2nd international conference on Topical Transcend in Science, Technology & Management."
+			},
+			
+			"education": 
+			{
+				"UG": 
+				{
+					"institute": "Sai Vidya Institute of Technology",
+					"course": "B.E Computer Science and Engineering",
+					"Startdate": "2011-01-01",
+					"Enddate": "2013-01-01",
+					"cgpa":"8.7"
+				},	
+				"Seniorsecondary" : 
+				{
+					"institute": "KV AFS YELAHANKA",
+					"cgpa":"8.7"
+				},
+				"Highschool" : 
+				{
+					"institute": "KV AFS Bhuj",
+					"cgpa":"8.7"
+				}	
+			},
+			"achievements": 
+			{
+				"Summary" : ["Attended 5 days industry orientation workshop organized by free software movement"]
+			},
+			"interests": 
+			{
+				"hobbies": ["Wildlife","Dance","Workout"]
+			}
+		},
+		{
+			"id":2,
+			"basics": 
+			{
+				"name": "Riya",
+				"AppliedFor": "Software Engineer",
+				"image": "",
+				"email": "riya@gmail.com",
+				"phone": "8888888888",
+				"location": 
+				{
+					"address": "12 maruthi nilaya ",
+					"postalCode": "560063",
+					"city": "Bangalore",
+					"state": "Karnataka"
+				},
+				"profiles":
+				{
+					"network": "LinkedIn",
+					"url": "https://linkedin.com/riya"
+				}
+			},
+			
+			"skills": 
+			{
+				"name": "AIML",
+				"level": "intermediate",
+				"keywords": 
+				[
+					"python",
+					"ML",
+					"AI",
+					"Image Processing"
+				]
+			},
+			
+			"work": 
+			{
+				"Companyname": "IBM",
+				"Position": "Software Engineer",
+				"Startdate": "2020-01-01",
+				"Enddate": "2022-01-01",
+				"Summary": "Associate engineer with development, testing verification and validation experience on Car UI display systems.Performed phone projection development of user stories and testing with infotainment system such as Android auto ,Car playAnalyzed requirements , created test plans, executed test cases for connectivity epic such as C-connect, F-connect.Good at analyzing DLT logs and analyzing the code refactor areas."
+			},
+				
+			"Internship":
+			{
+				"Companyname": "Ibm",
+				"Position": "intern",
+				"Startdate": "2019-01-01",
+				"Enddate": "2020-01-01",
+				"Summary": " Learned about Tools used for website testing such as Deep Trawl, NVDA, web developer extension, OpenVAS,Learned about the importance and concept of OWASP.Learned React JS and worked for Frontend development with professional."
+		
+			},
+				
+			"projects":
+			{
+				"name": "Diabetic Retinopaty",
+				"description": " created a GUI using QT designer which will take image of retina as input, input image will be processed and compare with the images present in database and then classified as one of DR stage or normal.OpenCV and image processing concepts are used. survey paper on this project is publish in 2nd international conference on Topical Transcend in Science, Technology & Management."
+			},
+			
+			"education": 
+			{
+				"UG": 
+				{
+					"institute": "Nagarujana Institute of Technology",
+					"course": "B.E Computer Science and Engineering",
+					"Startdate": "2010-01-01",
+					"Enddate": "2015-01-01",
+					"cgpa":"9.7"
+				},	
+				"Seniorsecondary" : 
+				{
+					"institute": "Reva Institute",
+					"cgpa":"8.7"
+				},
+				
+				"Highschool" : 
+				{
+					"institute": "Ryan public school",
+					"cgpa":"10.0"
+				}	
+			},
+			"achievements": 
+			{
+				"dums" : "",
+				"Summary" : [
+					"Attended 5 days industry orientation workshop organized by free software movement",
+					"Participated in google hackathon"
+				]
+			},
+			"interests": 
+			{
+				"hobbies": ["Wildlife","Dance","Workout","Reading books"]
+			}
+		},
+		{
+			"id":3,
+			"basics": 
+			{
+				"name": "Rahul Roy",
+				"AppliedFor": "Manager",
+				"image": "",
+				"email": "roy@gmail.com",
+				"phone": "77777777777",
+				"location": 
+				{
+					"address": " 305 A-Richard apartments ",
+					"postalCode": "560054",
+					"city": "Ahemdabad",
+					"state": "Gujarat"
+				},
+				"profiles":
+				{
+					"network": "LinkedIn",
+					"url": "https://linkedin.com/rahulroy"
+				}
+			},
+			
+			"skills": 
+			{
+				"name": "FullStack",
+				"level": "Master",
+				"keywords": 
+				[
+					"HTML",
+					"CSS",
+					"JavaScript",
+					"React",
+					"Java"
+				]
+			},
+			
+			"work": 
+			{
+				"Companyname": "Great Learning",
+				"Position": "Manager",
+				"Startdate": "2015-01-01",
+				"Enddate": "2020-01-01",
+				"Summary": "Associate engineer with development, testing verification and validation experience on Car UI display systems.Performed phone projection development of user stories and testing with infotainment system such as Android auto ,Car playAnalyzed requirements , created test plans, executed test cases for connectivity epic such as C-connect, F-connect.Good at analyzing DLT logs and analyzing the code refactor areas."
+			},
+				
+			"Internship":
+			{
+				"Companyname": "TCS",
+				"Position": "intern",
+				"Startdate": "2013-01-01",
+				"Enddate": "2014-01-01",
+				"Summary": " Learned about Tools used for website testing such as Deep Trawl, NVDA, web developer extension, OpenVAS,Learned about the importance and concept of OWASP.Learned React JS and worked for Frontend development with professional."
+		
+			},
+				
+			"projects":
+			{
+				"name": "E-Commerce Website",
+				"description": " I have created a ecommerce website using html,css,and react with javascripts, Porject has functionality where user can select any item of their choice and store it into a cart or they add item into their whishlist, seraching functionality allow user to search any product by name ."
+			},
+			
+			"education": 
+			{
+				"UG": 
+				{
+					"institute": "BMS Institute of Technology",
+					"course": "B.E Information Science and Engineering",
+					"Startdate": "2008-01-01",
+					"Enddate": "2011-01-01",
+					"cgpa":"8.7"
+				},	
+				"Seniorsecondary" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.0"
+				},
+				
+				"Highschool" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.6"
+				}	
+			},
+			"achievements": 
+			{
+				"Summary" : ["Attended a workshop on fullstack development", "participated in state level baskteball"]
+			},
+			"interests": 
+			{
+				"hobbies": ["Wildlife","Travelling","Workout"]
+			}
+		},
+		{
+			"id":4,
+			"basics": 
+			{
+				"name": "Priya Desai",
+				"AppliedFor": "HR",
+				"image": "",
+				"email": "Priya@gmail.com",
+				"phone": "6666666666",
+				"location": 
+				{
+					"address": " 201 A-Niteshapartments ",
+					"postalCode": "560054",
+					"city": "Bikaner",
+					"state": "Rajasthan"
+				},
+				"profiles":
+				{
+					"network": "LinkedIn",
+					"url": "https://linkedin.com/PriyaDesai"
+				}
+			},
+			
+			"skills": 
+			{
+				"name": "HR Management",
+				"level": "Master",
+				"keywords": 
+				[
+					"Excel",
+					"Data Management",
+					"Communication skill"
+
+				]
+			},
+			
+			"work": 
+			{
+				"Companyname": "Cerner private lmtd.",
+				"Position": "HR",
+				"Startdate": "2015-01-01",
+				"Enddate": "2020-01-01",
+				"Summary": "Involve in various communication activites with client, Handling data for all employees"
+			},
+				
+			"Internship":
+			{
+				"Companyname": "TCS",
+				"Position": "intern",
+				"Startdate": "2013-01-01",
+				"Enddate": "2014-01-01",
+				"Summary": "Source potential candidates from various online channels,Craft recruiting emails to attract passive candidates,Screen incoming resumes and application forms "
+			},
+				
+			"projects":
+			{
+				"name": "Efficiency Design of Solar Panels",
+				"description": "This project aims to design the solar panel cells with higer energy consumption in all types of weathers and also helps in absorbing higher energy."
+			},
+			
+			"education": 
+			{
+				"UG": 
+				{
+					"institute": "BMS Institute of Technology",
+					"course": "MCA",
+					"Startdate": "2008-01-01",
+					"Enddate": "2011-01-01",
+					"cgpa":"8.7"
+				},	
+				"Seniorsecondary" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.0"
+				},
+				
+				"Highschool" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.6"
+				}	
+			},
+			"achievements": 
+			{
+				"Summary" : ["Been complimented by your supervisor or co-workers","Increased revenue or sales for the company"]
+			},
+			"interests": 
+			{
+				"hobbies": ["Art&Craft","Travelling","Workout"]
+			}
+		},
+		{
+			"id":5,
+			"basics": 
+			{
+				"name": "Rakesh Ranjan",
+				"AppliedFor": "Manager",
+				"image": "",
+				"email": "Rakesh@gmail.com",
+				"phone": "6464632760",
+				"location": 
+				{
+					"address": " 201 A-Niteshapartments ",
+					"postalCode": "560054",
+					"city": "Bikaner",
+					"state": "Rajasthan"
+				},
+				"profiles":
+				{
+					"network": "LinkedIn",
+					"url": "https://linkedin.com/PriyaDesai"
+				}
+			},
+			
+			"skills": 
+			{
+				"name": "HR Management",
+				"level": "Master",
+				"keywords": 
+				[
+					"Excel",
+					"Data Management",
+					"Communication skill"
+
+				]
+			},
+			
+			"work": 
+			{
+				"Companyname": "Cerner private lmtd.",
+				"Position": "HR",
+				"Startdate": "2015-01-01",
+				"Enddate": "2020-01-01",
+				"Summary": "Involve in various communication activites with client, Handling data for all employees"
+			},
+				
+			"Internship":
+			{
+				"Companyname": "TCS",
+				"Position": "intern",
+				"Startdate": "2013-01-01",
+				"Enddate": "2014-01-01",
+				"Summary": "Source potential candidates from various online channels,Craft recruiting emails to attract passive candidates,Screen incoming resumes and application forms "
+			},
+				
+			"projects":
+			{
+				"name": "Efficiency Design of Solar Panels",
+				"description": "This project aims to design the solar panel cells with higer energy consumption in all types of weathers and also helps in absorbing higher energy."
+			},
+			
+			"education": 
+			{
+				"UG": 
+				{
+					"institute": "BMS Institute of Technology",
+					"course": "MCA",
+					"Startdate": "2008-01-01",
+					"Enddate": "2011-01-01",
+					"cgpa":"8.7"
+				},	
+				"Seniorsecondary" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.0"
+				},
+				
+				"Highschool" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.6"
+				}	
+			},
+			"achievements": 
+			{
+				"Summary" : ["Best employee of the year 2021","Increased revenue or sales for the company in 2019"]
+			},
+			"interests": 
+			{
+				"hobbies": ["Art&Craft","Travelling","Workout"]
+			}
+		},
+		{
+			"id":6,
+			"basics": 
+			{
+				"name": "Godse",
+				"AppliedFor": "Manager",
+				"image": "",
+				"email": "Godse@gmail.com",
+				"phone": "97445362891",
+				"location": 
+				{
+					"address": " 201 A-Niteshapartments ",
+					"postalCode": "560054",
+					"city": "Bikaner",
+					"state": "Rajasthan"
+				},
+				"profiles":
+				{
+					"network": "LinkedIn",
+					"url": "https://linkedin.com/PriyaDesai"
+				}
+			},
+			
+			"skills": 
+			{
+				"name": "HR Management",
+				"level": "Master",
+				"keywords": 
+				[
+					"Excel",
+					"Data Management",
+					"Communication skill"
+
+				]
+			},
+			
+			"work": 
+			{
+				"Companyname": "Cerner private lmtd.",
+				"Position": "HR",
+				"Startdate": "2015-01-01",
+				"Enddate": "2020-01-01",
+				"Summary": "Involve in various communication activites with client, Handling data for all employees"
+			},
+				
+			"Internship":
+			{
+				"Companyname": "TCS",
+				"Position": "intern",
+				"Startdate": "2013-01-01",
+				"Enddate": "2014-01-01",
+				"Summary": "Source potential candidates from various online channels,Craft recruiting emails to attract passive candidates,Screen incoming resumes and application forms "
+			},
+				
+			"projects":
+			{
+				"name": "Efficiency Design of Solar Panels",
+				"description": "This project aims to design the solar panel cells with higer energy consumption in all types of weathers and also helps in absorbing higher energy."
+			},
+			
+			"education": 
+			{
+				"UG": 
+				{
+					"institute": "BMS Institute of Technology",
+					"course": "MCA",
+					"Startdate": "2008-01-01",
+					"Enddate": "2011-01-01",
+					"cgpa":"8.7"
+				},	
+				"Seniorsecondary" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.0"
+				},
+				
+				"Highschool" : 
+				{
+					"institute": "Delhi Public School",
+					"cgpa":"9.6"
+				}	
+			},
+			"achievements": 
+			{
+				"Summary" : [
+					"Been complimented by your supervisor or co-workers",
+					"Increased revenue or sales for the company"
+				]
+			},
+			"interests": 
+			{
+				"hobbies": ["Art&Craft","Travelling","Workout"]
+			}
+		}
+    ];
+
+    let currentApplicantIndex = 0;
+
+    
+    displayApplicant();
+
+    function displayApplicant() {
+      const applicantDetails = document.getElementById('applicantDetails');
+      const currentApplicant = applicantsData[currentApplicantIndex];
+
+      if (currentApplicant) {
+        applicantDetails.innerHTML = `<h3 class="heading">Applicant:</h3><p>Id: ${currentApplicant.id}</p><h3 class="heading">Basics:</h3>
+        <p>Name: ${currentApplicant.basics.name}</p><p>AppliedFor: ${currentApplicant.basics.AppliedFor}</p>
+        <p>Email: ${currentApplicant.basics.email}</p><p>Phone: ${currentApplicant.basics.phone}</p><h3 class="heading">Location:</h3>
+        <p>Address: ${currentApplicant.basics.location.address}</p><p>Postal Code: ${currentApplicant.basics.location.postalCode}</p>
+        <p>City: ${currentApplicant.basics.location.city}</p><p>State: ${currentApplicant.basics.location.state}</p><h3 class="heading">Profile::</h3>
+        <p>Network: ${currentApplicant.basics.profiles.network}</p><p>URL: ${currentApplicant.basics.profiles.url}</p><h3 class="heading">Skills:</h3>
+        <p>Name: ${currentApplicant.skills.name}</p><p>Level: ${currentApplicant.skills.level}</p><h3 class="heading">Keywords:</h3>
+        <p><ul>${currentApplicant.skills.keywords.map(keyword => `<li>${keyword}</li>`).join('')}</ul>	
+		<h3 class="heading">Work:</h3><p>Company Name: ${currentApplicant.work.Companyname}</p>
+        <p>Position: ${currentApplicant.work.Position}</p> <p>Start Date: ${currentApplicant.work.Startdate}</p>
+		<p>End Date: ${currentApplicant.work.Enddate}</p><p><b>Summary:</b> ${currentApplicant.work.Summary}</p>
+        <h3 class="heading">Internship:</h3><p>Company Name: ${currentApplicant.Internship.Companyname}</p>
+        <p>Position: ${currentApplicant.Internship.Position}</p> <p>Start Date: ${currentApplicant.Internship.Startdate}</p>
+		<p>End Date: ${currentApplicant.Internship.Enddate}</p><p><b>Summary:</b> ${currentApplicant.Internship.Summary}</p><h3 class="heading">Projects:</h3>
+        <p><b>Name:</b> ${currentApplicant.projects.name}</p><p><b>Description:</b> ${currentApplicant.projects.description}</p><h3 class="heading">Education:</h3>
+        <p><b>UG:</b></p><p>Institute: ${currentApplicant.education.UG.institute}</p><p>Course: ${currentApplicant.education.UG.course}</p>
+        <p>CGPA: ${currentApplicant.education.UG.cgpa}</p><p><b>Senior Secondary:</b></p><p>Institute: ${currentApplicant.education.Seniorsecondary.institute}</p>
+        <p>CGPA: ${currentApplicant.education.Seniorsecondary.cgpa}</p><p><b>High School:</b></p><p>Institute: ${currentApplicant.education.Highschool.institute}</p>
+        <p>CGPA: ${currentApplicant.education.Highschool.cgpa}</p><h3 class="heading">Achivements:</h3><p>Summary: ${currentApplicant.achievements.Summary}</p>
+        <h3 class="heading">Interests:</h3><p>Hobbies: ${currentApplicant.interests.hobbies}</p>`;
+      } else {
+        applicantDetails.innerHTML = 'No applications';
+      }
+
+     
+      updateNavigationButtons();
+    }
+
+    function showNext() {
+      currentApplicantIndex++;
+      displayApplicant();
+    }
+
+    function showPrevious() {
+      currentApplicantIndex--;
+      displayApplicant();
+    }
+
+    function searchApplications() {
+      const searchTerm = document.getElementById('jobSearch').value.toLowerCase();
+      const filteredApplicants = applicantsData.filter(applicant => applicant.job.toLowerCase() === searchTerm);
+
+      if (filteredApplicants.length === 0) {
+        alert('Invalid search or No applications for this job');
+      } else {
+        applicantsData.length = 0; 
+        Array.prototype.push.apply(applicantsData, filteredApplicants); 
+        currentApplicantIndex = 0;
+        displayApplicant();
+      }
+    }
+
+    function updateNavigationButtons() {
+      const previousButton = document.querySelector('button[onclick="showPrevious()"]');
+      const nextButton = document.querySelector('button[onclick="showNext()"]');
+
+      if (applicantsData.length <= 1) {
+        
+        previousButton.style.display = 'none';
+        nextButton.style.display = 'none';
+      } else if (currentApplicantIndex === 0) {
+      
+        previousButton.style.display = 'none';
+        nextButton.style.display = 'inline-block';
+      } else if (currentApplicantIndex === applicantsData.length - 1) {
+        
+        previousButton.style.display = 'inline-block';
+        nextButton.style.display = 'none';
+      } else {
+       
+        previousButton.style.display = 'inline-block';
+        nextButton.style.display = 'inline-block';
+      }
+    }
+    </script>
+</body>
+</html>
